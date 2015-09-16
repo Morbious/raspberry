@@ -9,7 +9,7 @@ def create_rrd(rrdfile):
 
 # Feed updates to the RRD
 def update_rrd(rrdfile,rrddata):
-	rrdtool.update(rrdfile, 'N:32')
+	rrdtool.update(rrdfile, rrddata)
 
 def read_temp(section,detector):
 	print section,' ',detector
@@ -28,13 +28,14 @@ config.read('temperature.cfg')
 for section in config.sections():
 	print section
 	filename=section+'.rrd'
-	detector=config.get(filename,'detector')
+	detector=config.get(section,'detector')
 	# read_temp(section,detector)
 
-	if (not os.path.isfile(section)):
+	if (not os.path.isfile(filename)):
 		print "nie ma"
-		create_rrd(section)
+		create_rrd(filename)
 
-	temp = read_temp(section,detector)
-	
+	rrddata = 'N:32'
+
+
 	update_rrd(filename,rrddata)
